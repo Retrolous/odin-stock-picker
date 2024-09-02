@@ -1,30 +1,20 @@
-def get_indices_of_all(array, value)
-  array.each_index.select{|i| array[i] == value}
-end
+require "pry-byebug"
 
 def stock_picker(stocks)
-  sorted_stocks = stocks.sort
-  modified_stocks = stocks
-  while get_indices_of_all(modified_stocks, sorted_stocks[0])[0] > get_indices_of_all(modified_stocks, sorted_stocks[-1])[-1]
-    p sorted_stocks
-    if get_indices_of_all(stocks, sorted_stocks[0])[0] == stocks.length - 1 
-      p get_indices_of_all(stocks, sorted_stocks[0])
-      sorted_stocks.shift
-      modified_stocks.shift
-      next
-    elsif get_indices_of_all(stocks, sorted_stocks[-1])[-1] == 0
-      p get_indices_of_all(stocks, sorted_stocks[-1])
-      sorted_stocks.pop
-      modified_stocks.pop
-      next
-    end
-    
-    if (sorted_stocks[-1] - sorted_stocks[1]) > (sorted_stocks[-2] - sorted_stocks[0]) then sorted_stocks.shift else sorted_stocks.pop end
-      p sorted_stocks
-  end
-
-  [stocks.index(sorted_stocks[0]), stocks.index(sorted_stocks[-1])]
+  max_diff = stocks[1] - stocks[0]
+  smallest_element = current_min_element = stocks[0]
+  max_element = stocks[1]
+    stocks.each_index do |i|
+      next if i == 0 
+      if stocks[i] - current_min_element > max_diff 
+        max_diff = stocks[i] - current_min_element 
+        max_element = stocks[i]
+        current_min_element = smallest_element
+      end
+      smallest_element = stocks[i] if stocks[i] < current_min_element
+    end   
+  [stocks.index(current_min_element), stocks.index(max_element)]
 end
 
-p stock_picker([17,3,6,9,15,8,17,6,1,10])
+p stock_picker([1700,3,6,9,15,86786788,90123123123,1,23123123123123,23212312312312,1])
 
